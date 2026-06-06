@@ -36,10 +36,7 @@ export default function App() {
   const [openCart, setOpenCart] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 700);
-
+    const timer = setTimeout(() => setLoading(false), 700);
     return () => clearTimeout(timer);
   }, []);
 
@@ -82,10 +79,7 @@ export default function App() {
 
   const showToast = () => {
     setToast(true);
-
-    setTimeout(() => {
-      setToast(false);
-    }, 1800);
+    setTimeout(() => setToast(false), 1800);
   };
 
   const addToCart = (product) => {
@@ -168,10 +162,8 @@ export default function App() {
       `Total Pesanan: Rp ${total.toLocaleString("id-ID")}\n\n` +
       `Mohon dibantu cek stok dan ongkirnya ya.`;
 
-    const encodedMessage = encodeURIComponent(message);
-
     window.open(
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`,
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
       "_blank"
     );
 
@@ -179,67 +171,69 @@ export default function App() {
     setOpenCart(false);
   };
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  if (loading) return <LoadingScreen />;
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Header
-        search={search}
-        setSearch={setSearch}
-        totalQty={totalQty}
-        openCart={() => setOpenCart(true)}
-        openMember={() => setOpenMember(true)}
-      />
+    <div className="relative min-h-screen overflow-hidden bg-[linear-gradient(180deg,#eff6ff_0%,#ffffff_18%,#f8fafc_45%,#eff6ff_100%)]">
+      <div className="pointer-events-none fixed -left-32 top-20 h-[420px] w-[420px] rounded-full bg-blue-200/30 blur-3xl" />
+      <div className="pointer-events-none fixed -right-28 top-[35%] h-[380px] w-[380px] rounded-full bg-cyan-200/30 blur-3xl" />
+      <div className="pointer-events-none fixed bottom-[-140px] left-[20%] h-[360px] w-[360px] rounded-full bg-amber-200/25 blur-3xl" />
 
-      <PromoBar />
-      <Hero />
-      <Benefits />
+      <div className="relative z-10">
+        <Header
+          search={search}
+          setSearch={setSearch}
+          totalQty={totalQty}
+          openCart={() => setOpenCart(true)}
+          openMember={() => setOpenMember(true)}
+        />
 
-      <ProductGrid
-        products={filteredProducts}
-        categories={categories}
-        activeCategory={category}
-        setCategory={setCategory}
-        sort={sort}
-        setSort={setSort}
-        addToCart={addToCart}
-        openModal={setSelectedProduct}
-      />
+        <PromoBar />
+        <Hero />
+        <Benefits />
 
-      <Testimonials />
-      <Footer />
+        <ProductGrid
+          products={filteredProducts}
+          categories={categories}
+          activeCategory={category}
+          setCategory={setCategory}
+          sort={sort}
+          setSort={setSort}
+          addToCart={addToCart}
+          openModal={setSelectedProduct}
+        />
 
-      <FloatingWhatsApp />
+        <Testimonials />
+        <Footer />
 
-      <FloatingCart totalQty={totalQty} openCart={() => setOpenCart(true)} />
+        <FloatingWhatsApp />
+        <FloatingCart totalQty={totalQty} openCart={() => setOpenCart(true)} />
+        <BackToTop />
 
-      <BackToTop />
+        <CartDrawer
+          open={openCart}
+          closeCart={() => setOpenCart(false)}
+          cart={cart}
+          plus={plus}
+          minus={minus}
+          removeItem={removeItem}
+          clearCart={clearCart}
+          checkoutWhatsApp={checkoutWhatsApp}
+        />
 
-      <CartDrawer
-        open={openCart}
-        closeCart={() => setOpenCart(false)}
-        cart={cart}
-        plus={plus}
-        minus={minus}
-        removeItem={removeItem}
-        clearCart={clearCart}
-        checkoutWhatsApp={checkoutWhatsApp}
-      />
+        <ProductModal
+          product={selectedProduct}
+          closeModal={() => setSelectedProduct(null)}
+          addToCart={addToCart}
+        />
 
-      <ProductModal
-        product={selectedProduct}
-        closeModal={() => setSelectedProduct(null)}
-        addToCart={addToCart}
-      />
+        <MemberModal
+          open={openMember}
+          closeModal={() => setOpenMember(false)}
+        />
 
-      <MemberModal
-        open={openMember}
-        closeModal={() => setOpenMember(false)}
-      />
-
-      <Toast show={toast} text="Produk masuk keranjang" />
+        <Toast show={toast} text="Produk masuk keranjang" />
+      </div>
     </div>
   );
 }

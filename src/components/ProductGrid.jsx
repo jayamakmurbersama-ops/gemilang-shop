@@ -13,10 +13,16 @@ export default function ProductGrid({
   return (
     <section
       id="produk"
-      className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-blue-50/50 px-4 py-20"
+      className="relative overflow-hidden px-4 py-20"
     >
-      <div className="absolute left-0 top-20 h-72 w-72 rounded-full bg-blue-200/30 blur-3xl"></div>
-      <div className="absolute right-0 bottom-20 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-50/70 via-white/70 to-slate-100/80"></div>
+
+      <div className="absolute inset-0 opacity-[0.05]">
+        <div className="h-full w-full bg-[radial-gradient(#1d4ed8_1px,transparent_1px)] [background-size:26px_26px]" />
+      </div>
+
+      <div className="absolute left-0 top-20 h-72 w-72 rounded-full bg-blue-300/30 blur-3xl"></div>
+      <div className="absolute right-0 bottom-20 h-72 w-72 rounded-full bg-amber-300/30 blur-3xl"></div>
 
       <div className="relative mx-auto max-w-7xl">
         <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -36,14 +42,14 @@ export default function ProductGrid({
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
-            <div className="rounded-2xl bg-white px-5 py-3 font-black text-blue-700 shadow-sm ring-1 ring-slate-200">
+            <div className="rounded-2xl bg-white/90 px-5 py-3 font-black text-blue-700 shadow-sm ring-1 ring-slate-200 backdrop-blur">
               {products.length} Produk
             </div>
 
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="rounded-2xl border border-slate-200 bg-white px-5 py-3 font-black text-slate-700 shadow-sm outline-none focus:ring-4 focus:ring-blue-100"
+              className="rounded-2xl border border-slate-200 bg-white/90 px-5 py-3 font-black text-slate-700 shadow-sm outline-none backdrop-blur focus:ring-4 focus:ring-blue-100"
             >
               <option value="default">Urutkan: Default</option>
               <option value="price-low">Harga Termurah</option>

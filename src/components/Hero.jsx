@@ -2,10 +2,14 @@ export default function Hero() {
   return (
     <section
       id="beranda"
-      className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,#3b82f6_0,#1d4ed8_35%,#0f172a_100%)]"
+      className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,#60a5fa_0,#1d4ed8_34%,#0f172a_100%)]"
     >
       <div className="absolute -right-24 top-10 h-96 w-96 rounded-full bg-amber-300/20 blur-3xl"></div>
       <div className="absolute -left-24 bottom-0 h-80 w-80 rounded-full bg-white/10 blur-3xl"></div>
+
+      <div className="absolute inset-0 opacity-[0.07]">
+        <div className="h-full w-full bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:28px_28px]" />
+      </div>
 
       <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-16 lg:grid-cols-2 lg:items-center lg:py-24">
         <div className="text-white">
@@ -64,8 +68,8 @@ export default function Hero() {
           <div className="relative rounded-[42px] border border-white/30 bg-white/15 p-4 shadow-2xl backdrop-blur">
             <div className="rounded-[34px] bg-white p-5 shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1400&auto=format&fit=crop"
-                alt="Katalog alat tulis"
+                src="https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1600&auto=format&fit=crop"
+                alt="Alat tulis sekolah dan kantor"
                 className="h-[420px] w-full rounded-[28px] object-cover"
               />
             </div>
