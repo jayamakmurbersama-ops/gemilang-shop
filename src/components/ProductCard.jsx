@@ -15,43 +15,55 @@ export default function ProductCard({ product, addToCart, openModal }) {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
   };
 
+  const displayPrice =
+    product.wholesalePrice && product.wholesalePrice > 0
+      ? formatCurrency(product.wholesalePrice)
+      : "Hubungi Admin";
+
   return (
     <div
       onClick={() => openModal(product)}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
     >
-      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-50 to-slate-100 p-5">
-        <div className="absolute left-3 top-3 rounded-full bg-blue-700 px-3 py-1 text-xs font-black text-white">
+      <div className="relative h-52 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-amber-50 p-5">
+        <div className="absolute left-3 top-3 rounded-full bg-blue-700 px-3 py-1 text-xs font-black text-white shadow-lg">
           {product.badge}
+        </div>
+
+        <div className="absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-black text-slate-600 shadow">
+          {product.brand}
         </div>
 
         <img
           src={product.image}
           alt={product.name}
-          className="mx-auto h-full max-w-full object-contain transition duration-300 group-hover:scale-110"
+          onError={(e) => {
+            e.currentTarget.src = "https://placehold.co/600x600?text=No+Image";
+          }}
+          className="mx-auto h-full max-w-full object-contain drop-shadow-xl transition duration-300 group-hover:scale-110"
         />
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <p className="text-xs font-black uppercase text-blue-700">
-          {product.category} • {product.brand}
+      <div className="flex flex-1 flex-col p-5">
+        <p className="text-xs font-black uppercase tracking-wide text-blue-700">
+          {product.category}
         </p>
 
-        <h3 className="mt-2 min-h-[48px] font-black leading-snug text-slate-800">
+        <h3 className="mt-2 min-h-[52px] font-black leading-snug text-slate-900">
           {product.name}
         </h3>
 
-        <div className="mt-3">
-          <p className="text-xs text-slate-400 line-through">
-            Retail {formatCurrency(product.price)}
-          </p>
+        <div className="mt-4 rounded-2xl bg-slate-50 p-3">
+          {product.price > 0 && (
+            <p className="text-xs text-slate-400 line-through">
+              Retail {formatCurrency(product.price)}
+            </p>
+          )}
 
-          <p className="text-xl font-black text-blue-700">
-            {formatCurrency(product.wholesalePrice)}
-          </p>
+          <p className="text-xl font-black text-blue-700">{displayPrice}</p>
 
           <p className="text-xs font-bold text-slate-500">
-            Harga grosir mulai dari
+            Harga grosir / info stok
           </p>
         </div>
 
@@ -66,22 +78,29 @@ export default function ProductCard({ product, addToCart, openModal }) {
         </div>
 
         <div className="mt-auto space-y-2 pt-4">
-          {product.stock > 0 && (
+          {product.stock > 0 && product.wholesalePrice > 0 ? (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 addToCart(product);
               }}
-              className="w-full rounded-xl bg-blue-700 py-3 font-black text-white transition hover:bg-blue-800"
+              className="w-full rounded-2xl bg-blue-700 py-3 font-black text-white transition hover:bg-blue-800"
             >
               + Tambah
+            </button>
+          ) : (
+            <button
+              onClick={openWA}
+              className="w-full rounded-2xl bg-green-500 py-3 font-black text-white transition hover:bg-green-600"
+            >
+              Tanya Harga
             </button>
           )}
 
           {product.stock < 20 && (
             <button
               onClick={openWA}
-              className="w-full rounded-xl border border-green-500 py-3 font-black text-green-600 transition hover:bg-green-50"
+              className="w-full rounded-2xl border border-green-500 py-3 font-black text-green-600 transition hover:bg-green-50"
             >
               Hubungi WA
             </button>
