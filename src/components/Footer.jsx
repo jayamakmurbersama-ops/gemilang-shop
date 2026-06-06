@@ -1,3 +1,5 @@
+import BuildInfo from "./BuildInfo";
+
 export default function Footer() {
   return (
     <footer id="kontak" className="mt-20 bg-slate-950 text-white">
@@ -52,6 +54,10 @@ export default function Footer() {
 
       <div className="border-t border-slate-800 py-6 text-center text-sm text-slate-500">
         © 2026 Gemilang Maju Bersama Grosir. All rights reserved.
+
+        <div className="mt-1">
+          <BuildInfo />
+        </div>
       </div>
     </footer>
   );
