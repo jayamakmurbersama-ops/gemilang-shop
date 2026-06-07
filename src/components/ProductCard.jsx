@@ -23,9 +23,9 @@ export default function ProductCard({ product, addToCart, openModal }) {
   return (
     <div
       onClick={() => openModal(product)}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-[30px] border border-white/80 bg-white/80 shadow-xl shadow-blue-900/5 backdrop-blur-xl transition duration-300 hover:-translate-y-2 hover:bg-white hover:shadow-2xl"
     >
-      <div className="relative h-52 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-amber-50 p-5">
+      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-white via-blue-50 to-amber-50 p-5">
         <div className="absolute left-3 top-3 rounded-full bg-blue-700 px-3 py-1 text-xs font-black text-white shadow-lg">
           {product.badge}
         </div>
@@ -34,13 +34,15 @@ export default function ProductCard({ product, addToCart, openModal }) {
           {product.brand}
         </div>
 
+        <div className="absolute inset-x-8 bottom-4 h-10 rounded-full bg-blue-700/10 blur-xl"></div>
+
         <img
           src={product.image}
           alt={product.name}
           onError={(e) => {
             e.currentTarget.src = "https://placehold.co/600x600?text=No+Image";
           }}
-          className="mx-auto h-full max-w-full object-contain drop-shadow-xl transition duration-300 group-hover:scale-110"
+          className="relative z-10 mx-auto h-full max-w-full object-contain drop-shadow-2xl transition duration-300 group-hover:scale-110"
         />
       </div>
 
@@ -53,7 +55,7 @@ export default function ProductCard({ product, addToCart, openModal }) {
           {product.name}
         </h3>
 
-        <div className="mt-4 rounded-2xl bg-slate-50 p-3">
+        <div className="mt-4 rounded-3xl border border-slate-100 bg-gradient-to-br from-slate-50 to-blue-50/70 p-4">
           {product.price > 0 && (
             <p className="text-xs text-slate-400 line-through">
               Retail {formatCurrency(product.price)}
@@ -84,14 +86,14 @@ export default function ProductCard({ product, addToCart, openModal }) {
                 e.stopPropagation();
                 addToCart(product);
               }}
-              className="w-full rounded-2xl bg-blue-700 py-3 font-black text-white transition hover:bg-blue-800"
+              className="w-full rounded-2xl bg-blue-700 py-3 font-black text-white shadow-lg transition hover:bg-blue-800"
             >
               + Tambah
             </button>
           ) : (
             <button
               onClick={openWA}
-              className="w-full rounded-2xl bg-green-500 py-3 font-black text-white transition hover:bg-green-600"
+              className="w-full rounded-2xl bg-green-500 py-3 font-black text-white shadow-lg transition hover:bg-green-600"
             >
               Tanya Harga
             </button>
