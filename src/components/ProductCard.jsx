@@ -8,11 +8,12 @@ export default function ProductCard({ product, addToCart, openModal }) {
 
     const text =
       `Halo Gemilang Maju Bersama Grosir,%0A%0A` +
-      `Saya tertarik produk:%0A` +
-      `${product.name}%0A%0A` +
-      `Mohon info ketersediaannya ya.`;
+      `Saya tertarik produk:%0A${product.name}`;
 
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`,
+      "_blank"
+    );
   };
 
   const displayPrice =
@@ -23,91 +24,169 @@ export default function ProductCard({ product, addToCart, openModal }) {
   return (
     <div
       onClick={() => openModal(product)}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-[30px] border border-white/80 bg-white/80 shadow-xl shadow-blue-900/5 backdrop-blur-xl transition duration-300 hover:-translate-y-2 hover:bg-white hover:shadow-2xl"
+      className="
+      group
+      overflow-hidden
+      rounded-[30px]
+      border border-white/70
+      bg-white/75
+      backdrop-blur-xl
+      shadow-xl
+      shadow-blue-900/5
+      transition
+      duration-300
+      hover:-translate-y-2
+      hover:shadow-2xl
+      cursor-pointer
+    "
     >
-      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-white via-blue-50 to-amber-50 p-5">
-        <div className="absolute left-3 top-3 rounded-full bg-blue-700 px-3 py-1 text-xs font-black text-white shadow-lg">
-          {product.badge}
+      {/* TOP AREA */}
+
+      <div className="relative p-5 bg-gradient-to-br from-blue-50 via-slate-50 to-blue-100">
+
+        {/* badge kiri */}
+
+        <div className="
+          absolute
+          top-4
+          left-4
+          z-20
+          rounded-full
+          bg-blue-700
+          px-4
+          py-1
+          text-xs
+          font-black
+          text-white
+          shadow
+        ">
+          {product.badge || "JOYKO"}
         </div>
 
-        <div className="absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-black text-slate-600 shadow">
+        {/* badge kanan */}
+
+        <div className="
+          absolute
+          top-4
+          right-4
+          z-20
+          rounded-full
+          bg-white
+          px-4
+          py-1
+          text-xs
+          font-black
+          text-slate-700
+          shadow
+        ">
           {product.brand}
         </div>
 
-        <div className="absolute inset-x-8 bottom-4 h-10 rounded-full bg-blue-700/10 blur-xl"></div>
+        {/* FRAME GAMBAR */}
 
-        <img
-          src={product.image}
-          alt={product.name}
-          onError={(e) => {
-            e.currentTarget.src = "https://placehold.co/600x600?text=No+Image";
-          }}
-          className="relative z-10 mx-auto h-full max-w-full object-contain drop-shadow-2xl transition duration-300 group-hover:scale-110"
-        />
+        <div
+          className="
+          mt-10
+          rounded-2xl
+          border
+          border-slate-200
+          bg-gradient-to-br
+          from-slate-100
+          via-white
+          to-slate-200
+          p-5
+          shadow-inner
+          h-[210px]
+          flex
+          items-center
+          justify-center
+        "
+        >
+          <img
+            src={product.image}
+            alt={product.name}
+            onError={(e) => {
+              e.currentTarget.src =
+                "https://placehold.co/500x500?text=No+Image";
+            }}
+            className="
+            max-h-full
+            max-w-full
+            object-contain
+            transition
+            duration-300
+            group-hover:scale-110
+            drop-shadow-xl
+          "
+          />
+        </div>
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
-        <p className="text-xs font-black uppercase tracking-wide text-blue-700">
+      {/* CONTENT */}
+
+      <div className="p-5">
+
+        <p className="text-xs font-black text-blue-700 uppercase">
           {product.category}
         </p>
 
-        <h3 className="mt-2 min-h-[52px] font-black leading-snug text-slate-900">
+        <h3 className="mt-2 min-h-[60px] text-[28px] font-black text-slate-900 leading-tight">
           {product.name}
         </h3>
 
-        <div className="mt-4 rounded-3xl border border-slate-100 bg-gradient-to-br from-slate-50 to-blue-50/70 p-4">
-          {product.price > 0 && (
-            <p className="text-xs text-slate-400 line-through">
-              Retail {formatCurrency(product.price)}
-            </p>
-          )}
+        <div className="
+          mt-5
+          rounded-2xl
+          bg-slate-100/80
+          p-4
+        ">
+          <p className="text-3xl font-black text-blue-700">
+            {displayPrice}
+          </p>
 
-          <p className="text-xl font-black text-blue-700">{displayPrice}</p>
-
-          <p className="text-xs font-bold text-slate-500">
+          <p className="text-sm text-slate-500">
             Harga grosir / info stok
           </p>
         </div>
 
-        <div className="mt-3 flex items-center justify-between gap-2">
-          <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-black text-amber-700">
-            MOQ {product.moq}
+        <div className="mt-4 flex justify-between">
+
+          <span className="
+            rounded-full
+            bg-orange-100
+            px-3
+            py-1
+            text-xs
+            font-black
+            text-orange-700
+          ">
+            MOQ {product.moq || "Hubungi admin"}
           </span>
 
           <span className={`text-xs font-black ${stock.color}`}>
             ● {stock.text}
           </span>
+
         </div>
 
-        <div className="mt-auto space-y-2 pt-4">
-          {product.stock > 0 && product.wholesalePrice > 0 ? (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                addToCart(product);
-              }}
-              className="w-full rounded-2xl bg-blue-700 py-3 font-black text-white shadow-lg transition hover:bg-blue-800"
-            >
-              + Tambah
-            </button>
-          ) : (
-            <button
-              onClick={openWA}
-              className="w-full rounded-2xl bg-green-500 py-3 font-black text-white shadow-lg transition hover:bg-green-600"
-            >
-              Tanya Harga
-            </button>
-          )}
+        <button
+          onClick={openWA}
+          className="
+          mt-5
+          w-full
+          rounded-2xl
+          bg-green-500
+          py-4
+          text-lg
+          font-black
+          text-white
+          shadow-lg
+          hover:bg-green-600
+        "
+        >
+          Tanya Harga
+        </button>
 
-          {product.stock < 20 && (
-            <button
-              onClick={openWA}
-              className="w-full rounded-2xl border border-green-500 py-3 font-black text-green-600 transition hover:bg-green-50"
-            >
-              Hubungi WA
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );
