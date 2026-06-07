@@ -1,138 +1,223 @@
-import {
-  formatCurrency,
-  WHATSAPP_NUMBER,
-  getStockInfo,
-} from "../utils/helpers";
+import { WHATSAPP_NUMBER, getStockInfo, formatCurrency } from "../utils/helpers";
 
-export default function ProductModal({ product, closeModal, addToCart }) {
-  if (!product) return null;
+export default function ProductModal({
+  product,
+  isOpen,
+  onClose,
+  addToCart,
+}) {
+  if (!isOpen || !product) return null;
 
   const stock = getStockInfo(product.stock);
 
-  const contactWA = () => {
+  const openWA = () => {
     const text =
       `Halo Gemilang Maju Bersama Grosir,%0A%0A` +
       `Saya tertarik produk:%0A` +
-      `Nama: ${product.name}%0A` +
-      `Kategori: ${product.category}%0A` +
-      `Brand: ${product.brand}%0A` +
-      `MOQ: ${product.moq}%0A` +
-      `Status stok: ${stock.text}%0A%0A` +
-      `Mohon info harga dan ketersediaannya ya.`;
+      `${product.name}%0A%0A` +
+      `Mohon info harga grosir dan stok ya.`;
 
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
-  };
-
-  const handleAddToCart = (e) => {
-    e.stopPropagation();
-    addToCart(product);
-    setTimeout(closeModal, 100);
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`,
+      "_blank"
+    );
   };
 
   return (
     <div
-      onClick={closeModal}
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm"
+      className="
+      fixed
+      inset-0
+      z-[100]
+      flex
+      items-center
+      justify-center
+      bg-black/55
+      backdrop-blur-sm
+      p-4
+    "
+      onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[90vh] w-full max-w-5xl overflow-auto rounded-[28px] bg-white shadow-2xl"
+        className="
+        w-full
+        max-w-6xl
+        overflow-hidden
+        rounded-[34px]
+        bg-white
+        shadow-2xl
+      "
       >
-        <div className="flex justify-end p-4">
-          <button
-            onClick={closeModal}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-xl font-black hover:bg-slate-200"
-          >
-            ×
-          </button>
-        </div>
+        <div className="grid lg:grid-cols-2">
 
-        <div className="grid gap-7 p-6 pt-0 md:grid-cols-2 md:p-8 md:pt-0">
-          <div className="rounded-3xl bg-gradient-to-br from-blue-50 to-slate-100 p-8">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="mx-auto h-72 max-w-full object-contain"
-            />
-          </div>
+          {/* LEFT */}
 
-          <div>
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full bg-blue-700 px-3 py-1 text-xs font-black text-white">
-                {product.badge}
-              </span>
+          <div className="relative bg-gradient-to-br from-blue-50 via-slate-50 to-blue-100 p-8">
 
-              <span className={`rounded-full bg-slate-100 px-3 py-1 text-xs font-black ${stock.color}`}>
-                ● {stock.text}
-              </span>
+            <div className="absolute left-5 top-5 rounded-full bg-blue-700 px-5 py-2 text-sm font-black text-white">
+              {product.badge || "JOYKO"}
             </div>
 
-            <p className="mt-5 text-sm font-black uppercase text-blue-700">
-              {product.category} • {product.brand}
+            <button
+              onClick={onClose}
+              className="
+              absolute
+              right-5
+              top-5
+              h-12
+              w-12
+              rounded-full
+              bg-white
+              text-xl
+              shadow-lg
+            "
+            >
+              ✕
+            </button>
+
+            <div
+              className="
+              mt-14
+              flex
+              h-[420px]
+              items-center
+              justify-center
+              rounded-[28px]
+              border
+              border-slate-200
+              bg-gradient-to-br
+              from-white
+              via-slate-50
+              to-slate-100
+              p-8
+              shadow-inner
+            "
+            >
+              <img
+                src={product.image}
+                alt={product.name}
+                className="
+                max-h-full
+                max-w-full
+                object-contain
+                drop-shadow-2xl
+              "
+              />
+            </div>
+          </div>
+
+          {/* RIGHT */}
+
+          <div className="p-8">
+
+            <p className="font-black uppercase tracking-wider text-blue-700">
+              {product.category}
             </p>
 
-            <h2 className="mt-2 text-3xl font-black text-slate-950">
+            <h2 className="mt-2 text-4xl font-black text-slate-900">
               {product.name}
             </h2>
 
-            <div className="mt-5 rounded-3xl bg-slate-50 p-5">
-              <p className="text-sm text-slate-400 line-through">
-                Retail {formatCurrency(product.price)}
+            <div className="mt-6 rounded-3xl bg-blue-50 p-5">
+
+              <p className="text-4xl font-black text-blue-700">
+                {product.wholesalePrice > 0
+                  ? formatCurrency(product.wholesalePrice)
+                  : "Hubungi Admin"}
               </p>
 
-              <p className="mt-1 text-4xl font-black text-blue-700">
-                {formatCurrency(product.wholesalePrice)}
+              <p className="mt-1 font-bold text-slate-500">
+                Harga Grosir / Informasi Stok
               </p>
 
-              <p className="mt-1 text-sm font-bold text-slate-500">
-                Harga grosir mulai dari
-              </p>
             </div>
 
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              <div className="rounded-2xl bg-slate-50 p-4">
-                <p className="text-xs text-slate-500">MOQ</p>
-                <p className="font-black">{product.moq}</p>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+
+              <div className="rounded-2xl bg-slate-100 p-4">
+                <p className="text-sm text-slate-500">
+                  Brand
+                </p>
+
+                <p className="font-black">
+                  {product.brand}
+                </p>
               </div>
 
-              <div className="rounded-2xl bg-slate-50 p-4">
-                <p className="text-xs text-slate-500">Stok</p>
-                <p className="font-black">{product.stock} pcs</p>
+              <div className="rounded-2xl bg-slate-100 p-4">
+                <p className="text-sm text-slate-500">
+                  MOQ
+                </p>
+
+                <p className="font-black">
+                  {product.moq || "-"}
+                </p>
               </div>
 
-              <div className="rounded-2xl bg-slate-50 p-4">
-                <p className="text-xs text-slate-500">Brand</p>
-                <p className="font-black">{product.brand}</p>
+              <div className="rounded-2xl bg-slate-100 p-4">
+                <p className="text-sm text-slate-500">
+                  Status
+                </p>
+
+                <p className={`font-black ${stock.color}`}>
+                  {stock.text}
+                </p>
               </div>
 
-              <div className="rounded-2xl bg-slate-50 p-4">
-                <p className="text-xs text-slate-500">Kategori</p>
-                <p className="font-black">{product.category}</p>
-              </div>
             </div>
 
-            <p className="mt-5 leading-7 text-slate-600">
-              {product.description}
-            </p>
+            <div className="mt-7 rounded-3xl border border-slate-200 p-5">
 
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              {product.stock > 0 && (
-                <button
-                  onClick={handleAddToCart}
-                  className="rounded-2xl bg-blue-700 px-7 py-4 font-black text-white shadow-lg hover:bg-blue-800"
-                >
-                  Tambah Cart
-                </button>
-              )}
+              <h3 className="font-black text-slate-900">
+                Deskripsi
+              </h3>
+
+              <p className="mt-3 leading-7 text-slate-600">
+                Produk original berkualitas untuk kebutuhan
+                sekolah, kantor, reseller, maupun bisnis ATK.
+              </p>
+
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
 
               <button
-                onClick={contactWA}
-                className="rounded-2xl border border-green-500 px-7 py-4 font-black text-green-600 hover:bg-green-50"
+                onClick={() => addToCart(product)}
+                className="
+                flex-1
+                rounded-2xl
+                bg-blue-700
+                py-4
+                text-lg
+                font-black
+                text-white
+                shadow-lg
+              "
               >
-                Hubungi WA
+                + Tambah Keranjang
               </button>
+
+              <button
+                onClick={openWA}
+                className="
+                flex-1
+                rounded-2xl
+                bg-green-500
+                py-4
+                text-lg
+                font-black
+                text-white
+                shadow-lg
+              "
+              >
+                💬 Tanya Admin
+              </button>
+
             </div>
+
           </div>
+
         </div>
       </div>
     </div>
