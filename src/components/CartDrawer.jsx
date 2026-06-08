@@ -10,142 +10,287 @@ export default function CartDrawer({
   clearCart,
   checkoutWhatsApp,
 }) {
+  if (!open) return null;
+
   const total = cart.reduce(
-    (a, b) => a + (b.wholesalePrice || b.price) * b.qty,
+    (a, b) =>
+      a +
+      ((b.wholesalePrice || b.price || 0) * b.qty),
     0
   );
 
-  const totalQty = cart.reduce((a, b) => a + b.qty, 0);
-
   return (
     <div
-      onMouseLeave={closeCart}
-      className={`fixed right-0 top-0 z-50 h-full w-full max-w-md bg-white shadow-2xl transition-transform duration-300 ${
-        open ? "translate-x-0" : "translate-x-full"
-      }`}
+      onClick={closeCart}
+      className="fixed inset-0 z-[90] bg-black/50 backdrop-blur-sm"
     >
-      <div className="bg-slate-950 p-5 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-black">Keranjang</h2>
-            <p className="text-sm text-slate-300">{totalQty} item dipilih</p>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="
+        absolute
+        right-0
+        top-0
+        flex
+        h-full
+        w-full
+        max-w-[460px]
+        flex-col
+        bg-white
+        shadow-2xl
+      "
+      >
+        {/* HEADER */}
+
+        <div className="border-b p-5">
+
+          <div className="flex items-center justify-between">
+
+            <div>
+
+              <h2 className="text-2xl font-black">
+                Keranjang
+              </h2>
+
+              <p className="text-sm text-slate-500">
+                {cart.length} produk dipilih
+              </p>
+
+            </div>
+
+            <button
+              onClick={closeCart}
+              className="
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-full
+              bg-slate-100
+              text-xl
+            "
+            >
+              ×
+            </button>
+
           </div>
 
-          <button
-            onClick={closeCart}
-            className="h-10 w-10 rounded-full bg-white/10 text-2xl"
-          >
-            ×
-          </button>
         </div>
 
-        {cart.length > 0 && (
-          <button
-            onClick={clearCart}
-            className="mt-4 rounded-xl bg-white/10 px-4 py-2 text-sm font-black text-white hover:bg-white/20"
-          >
-            Kosongkan Keranjang
-          </button>
-        )}
-      </div>
+        {/* LIST */}
 
-      <div className="h-[68vh] space-y-4 overflow-y-auto bg-slate-50 p-5">
-        {cart.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-center">
-            <p className="text-5xl">🛒</p>
-            <p className="mt-4 font-black">Keranjang masih kosong</p>
-            <p className="mt-1 text-sm text-slate-500">
-              Tambahkan produk terlebih dahulu.
-            </p>
-          </div>
-        ) : (
-          cart.map((item) => {
-            const price = item.wholesalePrice || item.price;
+        <div className="flex-1 overflow-auto p-4">
 
-            return (
-              <div
-                key={item.id}
-                className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm"
-              >
-                <div className="flex gap-4">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-20 w-20 rounded-2xl bg-slate-100 object-contain p-2"
-                  />
+          {cart.length === 0 ? (
 
-                  <div className="flex-1">
-                    <div className="flex gap-2">
-                      <h3 className="flex-1 font-black leading-snug text-slate-900">
-                        {item.name}
-                      </h3>
+            <div className="py-24 text-center">
 
-                      <button
-                        onClick={() => removeItem(item.id)}
-                        className="text-sm font-black text-red-500"
+              <p className="text-6xl">
+                🛒
+              </p>
+
+              <h3 className="mt-4 text-2xl font-black">
+                Keranjang kosong
+              </h3>
+
+              <p className="mt-2 text-slate-500">
+                Tambahkan produk dulu
+              </p>
+
+            </div>
+
+          ) : (
+
+            <div className="space-y-4">
+
+              {cart.map((item) => {
+
+                const price =
+                  item.wholesalePrice ||
+                  item.price ||
+                  0;
+
+                return (
+
+                  <div
+                    key={item.id}
+                    className="
+                    rounded-3xl
+                    border
+                    border-slate-200
+                    p-4
+                  "
+                  >
+
+                    <div className="flex gap-4">
+
+                      <div
+                        className="
+                        flex
+                        h-24
+                        w-24
+                        items-center
+                        justify-center
+                        rounded-2xl
+                        bg-slate-100
+                        p-3
+                      "
                       >
-                        Hapus
-                      </button>
+
+                        <img
+                          src={item.image}
+                          className="
+                          max-h-full
+                          object-contain
+                        "
+                        />
+
+                      </div>
+
+                      <div className="flex-1">
+
+                        <h4 className="font-black">
+                          {item.name}
+                        </h4>
+
+                        <p className="mt-1 text-blue-700 font-black">
+                          {formatCurrency(price)}
+                        </p>
+
+                        <div className="mt-3 flex items-center justify-between">
+
+                          <div className="flex gap-2">
+
+                            <button
+                              onClick={() => minus(item.id)}
+                              className="
+                              h-9
+                              w-9
+                              rounded-xl
+                              bg-slate-100
+                            "
+                            >
+                              -
+                            </button>
+
+                            <div
+                              className="
+                              flex
+                              h-9
+                              w-10
+                              items-center
+                              justify-center
+                              rounded-xl
+                              bg-slate-50
+                            "
+                            >
+                              {item.qty}
+                            </div>
+
+                            <button
+                              onClick={() => plus(item.id)}
+                              className="
+                              h-9
+                              w-9
+                              rounded-xl
+                              bg-blue-700
+                              text-white
+                            "
+                            >
+                              +
+                            </button>
+
+                          </div>
+
+                          <button
+                            onClick={() =>
+                              removeItem(item.id)
+                            }
+                            className="
+                            text-sm
+                            font-black
+                            text-red-500
+                          "
+                          >
+                            Hapus
+                          </button>
+
+                        </div>
+
+                      </div>
+
                     </div>
 
-                    <p className="mt-1 text-sm font-bold text-blue-700">
-                      {formatCurrency(price)}
-                    </p>
-
-                    <p className="text-xs text-slate-500">MOQ {item.moq}</p>
-
-                    <div className="mt-3 flex items-center gap-2">
-                      <button
-                        onClick={() => minus(item.id)}
-                        className="h-9 w-9 rounded-xl bg-slate-200 font-black"
-                      >
-                        -
-                      </button>
-
-                      <span className="min-w-8 text-center font-black">
-                        {item.qty}
-                      </span>
-
-                      <button
-                        onClick={() => plus(item.id)}
-                        className="h-9 w-9 rounded-xl bg-blue-700 font-black text-white"
-                      >
-                        +
-                      </button>
-
-                      <p className="ml-auto text-sm font-black text-slate-800">
-                        {formatCurrency(price * item.qty)}
-                      </p>
-                    </div>
                   </div>
-                </div>
-              </div>
-            );
-          })
-        )}
-      </div>
 
-      <div className="border-t bg-white p-5">
-        <div className="rounded-3xl bg-slate-50 p-4">
-          <div className="flex justify-between text-sm text-slate-500">
-            <span>Total Item</span>
-            <span>{totalQty}</span>
-          </div>
+                );
+              })}
 
-          <div className="mt-2 flex justify-between text-xl font-black">
-            <span>Total</span>
-            <span>{formatCurrency(total)}</span>
-          </div>
+            </div>
+
+          )}
+
         </div>
 
-        <button
-          onClick={checkoutWhatsApp}
-          disabled={cart.length === 0}
-          className="mt-4 w-full rounded-2xl bg-green-500 py-4 font-black text-white disabled:bg-slate-300"
+        {/* FOOTER */}
+
+        <div
+          className="
+          sticky
+          bottom-0
+          border-t
+          bg-white
+          p-5
+        "
         >
-          Checkout WhatsApp
-        </button>
+
+          <div className="mb-4 flex justify-between">
+
+            <span className="font-bold">
+              Total
+            </span>
+
+            <span className="text-2xl font-black text-blue-700">
+              {formatCurrency(total)}
+            </span>
+
+          </div>
+
+          <div className="flex gap-3">
+
+            <button
+              onClick={clearCart}
+              className="
+              rounded-2xl
+              border
+              px-5
+              py-4
+              font-black
+            "
+            >
+              Reset
+            </button>
+
+            <button
+              onClick={checkoutWhatsApp}
+              className="
+              flex-1
+              rounded-2xl
+              bg-green-500
+              py-4
+              font-black
+              text-white
+            "
+            >
+              Checkout WA
+            </button>
+
+          </div>
+
+        </div>
+
       </div>
+
     </div>
   );
 }
