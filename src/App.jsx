@@ -48,12 +48,16 @@ export default function App() {
 
   const filteredProducts = useMemo(() => {
     let result = products.filter((product) => {
-      const searchMatch = product.name
-        .toLowerCase()
-        .includes(search.toLowerCase());
+      const keyword = search.toLowerCase();
+
+      const searchMatch =
+        product.name.toLowerCase().includes(keyword) ||
+        product.category.toLowerCase().includes(keyword) ||
+        product.brand.toLowerCase().includes(keyword) ||
+        product.sku.toLowerCase().includes(keyword);
 
       const categoryMatch =
-        category === "Semua" || category === product.category;
+        category === "Semua" || product.category === category;
 
       return searchMatch && categoryMatch;
     });
@@ -174,10 +178,10 @@ export default function App() {
   if (loading) return <LoadingScreen />;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[linear-gradient(180deg,#eff6ff_0%,#ffffff_18%,#f8fafc_45%,#eff6ff_100%)]">
-      <div className="pointer-events-none fixed -left-32 top-20 h-[420px] w-[420px] rounded-full bg-blue-200/30 blur-3xl" />
-      <div className="pointer-events-none fixed -right-28 top-[35%] h-[380px] w-[380px] rounded-full bg-cyan-200/30 blur-3xl" />
-      <div className="pointer-events-none fixed bottom-[-140px] left-[20%] h-[360px] w-[360px] rounded-full bg-amber-200/25 blur-3xl" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+      <div className="pointer-events-none fixed -left-32 top-20 h-[420px] w-[420px] rounded-full bg-blue-300/30 blur-3xl" />
+      <div className="pointer-events-none fixed -right-32 top-[35%] h-[420px] w-[420px] rounded-full bg-cyan-300/25 blur-3xl" />
+      <div className="pointer-events-none fixed bottom-[-160px] left-[20%] h-[380px] w-[380px] rounded-full bg-blue-200/30 blur-3xl" />
 
       <div className="relative z-10">
         <Header
@@ -188,22 +192,31 @@ export default function App() {
           openMember={() => setOpenMember(true)}
         />
 
-        <PromoBar />
-        <Hero />
-        <Benefits />
+        <main>
+          <PromoBar />
 
-        <ProductGrid
-          products={filteredProducts}
-          categories={categories}
-          activeCategory={category}
-          setCategory={setCategory}
-          sort={sort}
-          setSort={setSort}
-          addToCart={addToCart}
-          openModal={setSelectedProduct}
-        />
+          <Hero />
 
-        <Testimonials />
+          <div className="py-8 md:py-12">
+            <Benefits />
+          </div>
+
+          <div className="py-6 md:py-10">
+            <ProductGrid
+              products={filteredProducts}
+              categories={categories}
+              activeCategory={category}
+              setCategory={setCategory}
+              sort={sort}
+              setSort={setSort}
+              addToCart={addToCart}
+              openModal={setSelectedProduct}
+            />
+          </div>
+
+          <Testimonials />
+        </main>
+
         <Footer />
 
         <FloatingWhatsApp />
