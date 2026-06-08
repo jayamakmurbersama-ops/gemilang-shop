@@ -1,44 +1,55 @@
 export default function Benefits() {
   const items = [
-    ["🚚","Pengiriman Cepat"],
-    ["💰","Harga Grosir"],
-    ["📦","Produk Lengkap"],
-    ["💬","Fast Respon"],
+    {
+      icon: "📦",
+      title: "Produk Lengkap",
+      desc: "Beragam kebutuhan sekolah dan kantor tersedia lengkap",
+    },
+    {
+      icon: "🚚",
+      title: "Pengiriman Cepat",
+      desc: "Proses cepat dan aman ke seluruh Indonesia",
+    },
+    {
+      icon: "🛡️",
+      title: "Produk Original",
+      desc: "Jaminan produk original dan berkualitas",
+    },
+    {
+      icon: "🎧",
+      title: "Fast Response",
+      desc: "Layanan admin cepat via WhatsApp",
+    },
   ];
 
   return (
-    <section className="relative py-14">
+    <section className="relative bg-white px-4 py-10">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid overflow-hidden rounded-[32px] bg-white shadow-xl ring-1 ring-slate-100 md:grid-cols-4">
+          {items.map((item, index) => (
+            <div
+              key={item.title}
+              className={`flex items-center gap-5 p-6 ${
+                index !== items.length - 1 ? "md:border-r md:border-slate-200" : ""
+              }`}
+            >
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-blue-50 text-3xl">
+                {item.icon}
+              </div>
 
-      <div className="mx-auto grid max-w-7xl gap-5 px-4 md:grid-cols-4">
+              <div>
+                <h3 className="text-lg font-black text-slate-900">
+                  {item.title}
+                </h3>
 
-        {items.map(([icon,title]) => (
-
-          <div
-            key={title}
-            className="
-            rounded-[30px]
-            border border-white/70
-            bg-white/70
-            p-6
-            backdrop-blur-xl
-            shadow-xl
-          "
-          >
-
-            <div className="text-5xl">
-              {icon}
+                <p className="mt-1 text-sm leading-6 text-slate-500">
+                  {item.desc}
+                </p>
+              </div>
             </div>
-
-            <h3 className="mt-4 text-xl font-black">
-              {title}
-            </h3>
-
-          </div>
-
-        ))}
-
+          ))}
+        </div>
       </div>
-
     </section>
   );
 }
