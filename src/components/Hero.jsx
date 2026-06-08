@@ -2,14 +2,24 @@ export default function Hero() {
   return (
     <section
       id="beranda"
-      className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800 text-white"
+      className="
+      relative
+      overflow-hidden
+      bg-gradient-to-br
+      from-blue-700
+      via-blue-600
+      to-blue-800
+      text-white
+      rounded-b-[50px]
+      shadow-2xl
+    "
     >
       <div className="absolute -left-20 top-10 h-80 w-80 rounded-full bg-blue-300/20 blur-3xl"></div>
       <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-cyan-300/10 blur-3xl"></div>
 
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 lg:grid-cols-2 lg:items-center">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-20 lg:grid-cols-2 lg:items-center">
 
-        <div className="relative z-10">
+        <div>
 
           <div className="inline-flex rounded-full bg-white/15 px-5 py-2 text-sm font-black backdrop-blur">
             ⭐ Supplier ATK Sekolah & Kantor
@@ -42,31 +52,6 @@ export default function Hero() {
             >
               Hubungi Admin
             </a>
-
-          </div>
-
-          <div className="mt-10 grid max-w-lg grid-cols-3 gap-4">
-
-            <div className="rounded-3xl bg-white/10 p-5 backdrop-blur">
-              <p className="text-3xl font-black">100+</p>
-              <p className="text-sm text-blue-100">
-                Produk
-              </p>
-            </div>
-
-            <div className="rounded-3xl bg-white/10 p-5 backdrop-blur">
-              <p className="text-3xl font-black">Fast</p>
-              <p className="text-sm text-blue-100">
-                Respon
-              </p>
-            </div>
-
-            <div className="rounded-3xl bg-white/10 p-5 backdrop-blur">
-              <p className="text-3xl font-black">WA</p>
-              <p className="text-sm text-blue-100">
-                Checkout
-              </p>
-            </div>
 
           </div>
 
