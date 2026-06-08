@@ -42,7 +42,7 @@ export default function Header({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari produk..."
-            className="w-full max-w-[230px] rounded-xl border-2 border-blue-200 bg-white/90 px-4 py-2 shadow-sm outline-none backdrop-blur focus:ring-4 focus:ring-blue-100"
+            className="w-full max-w-[230px] rounded-xl border-2 border-blue-900 bg-white/90 px-4 py-2 shadow-sm outline-none backdrop-blur focus:ring-4 focus:ring-blue-100"
           />
 
           <button
