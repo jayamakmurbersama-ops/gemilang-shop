@@ -13,284 +13,141 @@ export default function CartDrawer({
   if (!open) return null;
 
   const total = cart.reduce(
-    (a, b) =>
-      a +
-      ((b.wholesalePrice || b.price || 0) * b.qty),
+    (sum, item) => sum + (item.wholesalePrice || item.price || 0) * item.qty,
     0
   );
+
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
 
   return (
     <div
       onClick={closeCart}
-      className="fixed inset-0 z-[90] bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-[90] bg-slate-950/60 backdrop-blur-sm"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="
-        absolute
-        right-0
-        top-0
-        flex
-        h-full
-        w-full
-        max-w-[460px]
-        flex-col
-        bg-white
-        shadow-2xl
-      "
+        className="absolute right-0 top-0 flex h-full w-full max-w-[460px] flex-col bg-white shadow-2xl"
       >
-        {/* HEADER */}
-
-        <div className="border-b p-5">
-
+        <div className="bg-gradient-to-r from-blue-800 to-blue-600 p-5 text-white">
           <div className="flex items-center justify-between">
-
             <div>
-
-              <h2 className="text-2xl font-black">
-                Keranjang
-              </h2>
-
-              <p className="text-sm text-slate-500">
-                {cart.length} produk dipilih
-              </p>
-
+              <h2 className="text-2xl font-black">Keranjang Belanja</h2>
+              <p className="text-sm text-blue-100">{totalQty} item dipilih</p>
             </div>
 
             <button
               onClick={closeCart}
-              className="
-              flex
-              h-10
-              w-10
-              items-center
-              justify-center
-              rounded-full
-              bg-slate-100
-              text-xl
-            "
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-2xl font-black"
             >
               ×
             </button>
-
           </div>
-
         </div>
 
-        {/* LIST */}
-
-        <div className="flex-1 overflow-auto p-4">
-
+        <div className="flex-1 space-y-4 overflow-auto bg-slate-50 p-4">
           {cart.length === 0 ? (
-
-            <div className="py-24 text-center">
-
-              <p className="text-6xl">
-                🛒
-              </p>
-
-              <h3 className="mt-4 text-2xl font-black">
-                Keranjang kosong
-              </h3>
-
+            <div className="rounded-[28px] bg-white p-10 text-center shadow-sm">
+              <p className="text-6xl">🛒</p>
+              <h3 className="mt-4 text-2xl font-black">Keranjang kosong</h3>
               <p className="mt-2 text-slate-500">
-                Tambahkan produk dulu
+                Tambahkan produk terlebih dahulu.
               </p>
-
             </div>
-
           ) : (
+            cart.map((item) => {
+              const price = item.wholesalePrice || item.price || 0;
 
-            <div className="space-y-4">
-
-              {cart.map((item) => {
-
-                const price =
-                  item.wholesalePrice ||
-                  item.price ||
-                  0;
-
-                return (
-
-                  <div
-                    key={item.id}
-                    className="
-                    rounded-3xl
-                    border
-                    border-slate-200
-                    p-4
-                  "
-                  >
-
-                    <div className="flex gap-4">
-
-                      <div
-                        className="
-                        flex
-                        h-24
-                        w-24
-                        items-center
-                        justify-center
-                        rounded-2xl
-                        bg-slate-100
-                        p-3
-                      "
-                      >
-
-                        <img
-                          src={item.image}
-                          className="
-                          max-h-full
-                          object-contain
-                        "
-                        />
-
-                      </div>
-
-                      <div className="flex-1">
-
-                        <h4 className="font-black">
-                          {item.name}
-                        </h4>
-
-                        <p className="mt-1 text-blue-700 font-black">
-                          {formatCurrency(price)}
-                        </p>
-
-                        <div className="mt-3 flex items-center justify-between">
-
-                          <div className="flex gap-2">
-
-                            <button
-                              onClick={() => minus(item.id)}
-                              className="
-                              h-9
-                              w-9
-                              rounded-xl
-                              bg-slate-100
-                            "
-                            >
-                              -
-                            </button>
-
-                            <div
-                              className="
-                              flex
-                              h-9
-                              w-10
-                              items-center
-                              justify-center
-                              rounded-xl
-                              bg-slate-50
-                            "
-                            >
-                              {item.qty}
-                            </div>
-
-                            <button
-                              onClick={() => plus(item.id)}
-                              className="
-                              h-9
-                              w-9
-                              rounded-xl
-                              bg-blue-700
-                              text-white
-                            "
-                            >
-                              +
-                            </button>
-
-                          </div>
-
-                          <button
-                            onClick={() =>
-                              removeItem(item.id)
-                            }
-                            className="
-                            text-sm
-                            font-black
-                            text-red-500
-                          "
-                          >
-                            Hapus
-                          </button>
-
-                        </div>
-
-                      </div>
-
+              return (
+                <div
+                  key={item.id}
+                  className="rounded-[28px] bg-white p-4 shadow-sm ring-1 ring-slate-100"
+                >
+                  <div className="flex gap-4">
+                    <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-slate-100 p-3">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="max-h-full max-w-full object-contain"
+                      />
                     </div>
 
+                    <div className="min-w-0 flex-1">
+                      <h3 className="line-clamp-2 font-black leading-snug text-slate-900">
+                        {item.name}
+                      </h3>
+
+                      <p className="mt-1 text-sm font-bold text-blue-700">
+                        {price > 0 ? formatCurrency(price) : "Hubungi Admin"}
+                      </p>
+
+                      <div className="mt-3 flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => minus(item.id)}
+                            className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 font-black"
+                          >
+                            -
+                          </button>
+
+                          <span className="flex h-9 min-w-10 items-center justify-center rounded-xl bg-blue-50 font-black text-blue-700">
+                            {item.qty}
+                          </span>
+
+                          <button
+                            onClick={() => plus(item.id)}
+                            className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-700 font-black text-white"
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="text-sm font-black text-red-500"
+                        >
+                          Hapus
+                        </button>
+                      </div>
+                    </div>
                   </div>
-
-                );
-              })}
-
-            </div>
-
+                </div>
+              );
+            })
           )}
-
         </div>
 
-        {/* FOOTER */}
+        <div className="border-t bg-white p-5">
+          <div className="rounded-[24px] bg-blue-50 p-4">
+            <div className="flex justify-between text-sm font-bold text-slate-500">
+              <span>Total Item</span>
+              <span>{totalQty}</span>
+            </div>
 
-        <div
-          className="
-          sticky
-          bottom-0
-          border-t
-          bg-white
-          p-5
-        "
-        >
-
-          <div className="mb-4 flex justify-between">
-
-            <span className="font-bold">
-              Total
-            </span>
-
-            <span className="text-2xl font-black text-blue-700">
-              {formatCurrency(total)}
-            </span>
-
+            <div className="mt-2 flex justify-between text-xl font-black">
+              <span>Total</span>
+              <span className="text-blue-700">{formatCurrency(total)}</span>
+            </div>
           </div>
 
-          <div className="flex gap-3">
-
+          <div className="mt-4 flex gap-3">
             <button
               onClick={clearCart}
-              className="
-              rounded-2xl
-              border
-              px-5
-              py-4
-              font-black
-            "
+              disabled={cart.length === 0}
+              className="rounded-2xl border border-slate-200 px-5 py-4 font-black text-slate-600 disabled:opacity-40"
             >
               Reset
             </button>
 
             <button
               onClick={checkoutWhatsApp}
-              className="
-              flex-1
-              rounded-2xl
-              bg-green-500
-              py-4
-              font-black
-              text-white
-            "
+              disabled={cart.length === 0}
+              className="flex-1 rounded-2xl bg-green-500 py-4 font-black text-white shadow-lg disabled:bg-slate-300"
             >
               Checkout WA
             </button>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
