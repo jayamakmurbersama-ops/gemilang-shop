@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header";
 import PromoBar from "./components/PromoBar";
@@ -15,11 +16,14 @@ import MemberModal from "./components/MemberModal";
 import BackToTop from "./components/BackToTop";
 import Toast from "./components/Toast";
 import LoadingScreen from "./components/LoadingScreen";
+import StoreStats from "./components/StoreStats";
+
+import TrisensaPage from "./pages/TrisensaPage";
 
 import { products } from "./data/products";
 import { WHATSAPP_NUMBER } from "./utils/helpers";
 
-export default function App() {
+function HomePage() {
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [openMember, setOpenMember] = useState(false);
@@ -37,18 +41,29 @@ export default function App() {
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 700);
-    return () => clearTimeout(timer);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {
     localStorage.setItem("gemilang_cart", JSON.stringify(cart));
   }, [cart]);
 
-  const categories = ["Semua", ...new Set(products.map((p) => p.category))];
+  useEffect(() => {
+    document.title =
+      "Grosir ATK Surabaya | Supplier ATK Sby | Gemilang Maju Bersama";
+  }, []);
+
+  const categories = [
+    "Semua",
+    ...new Set(products.map((product) => product.category)),
+  ];
 
   const filteredProducts = useMemo(() => {
     let result = products.filter((product) => {
-      const keyword = search.toLowerCase();
+      const keyword = search.toLowerCase().trim();
 
       const searchMatch =
         product.name.toLowerCase().includes(keyword) ||
@@ -64,18 +79,24 @@ export default function App() {
 
     if (sort === "price-low") {
       result = [...result].sort(
-        (a, b) => (a.wholesalePrice || a.price) - (b.wholesalePrice || b.price)
+        (a, b) =>
+          (a.wholesalePrice || a.price) -
+          (b.wholesalePrice || b.price)
       );
     }
 
     if (sort === "price-high") {
       result = [...result].sort(
-        (a, b) => (b.wholesalePrice || b.price) - (a.wholesalePrice || a.price)
+        (a, b) =>
+          (b.wholesalePrice || b.price) -
+          (a.wholesalePrice || a.price)
       );
     }
 
     if (sort === "stock-high") {
-      result = [...result].sort((a, b) => b.stock - a.stock);
+      result = [...result].sort(
+        (a, b) => b.stock - a.stock
+      );
     }
 
     return result;
@@ -83,20 +104,36 @@ export default function App() {
 
   const showToast = () => {
     setToast(true);
-    setTimeout(() => setToast(false), 1800);
+
+    setTimeout(() => {
+      setToast(false);
+    }, 1800);
   };
 
   const addToCart = (product) => {
     setCart((prev) => {
-      const exist = prev.find((item) => item.id === product.id);
+      const exist = prev.find(
+        (item) => item.id === product.id
+      );
 
       if (exist) {
         return prev.map((item) =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+          item.id === product.id
+            ? {
+                ...item,
+                qty: item.qty + 1,
+              }
+            : item
         );
       }
 
-      return [...prev, { ...product, qty: 1 }];
+      return [
+        ...prev,
+        {
+          ...product,
+          qty: 1,
+        },
+      ];
     });
 
     showToast();
@@ -106,7 +143,12 @@ export default function App() {
   const plus = (id) => {
     setCart((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, qty: item.qty + 1 } : item
+        item.id === id
+          ? {
+              ...item,
+              qty: item.qty + 1,
+            }
+          : item
       )
     );
 
@@ -117,33 +159,47 @@ export default function App() {
     setCart((prev) =>
       prev
         .map((item) =>
-          item.id === id ? { ...item, qty: item.qty - 1 } : item
+          item.id === id
+            ? {
+                ...item,
+                qty: item.qty - 1,
+              }
+            : item
         )
         .filter((item) => item.qty > 0)
     );
   };
 
   const removeItem = (id) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
+    setCart((prev) =>
+      prev.filter((item) => item.id !== id)
+    );
   };
 
   const clearCart = () => {
     setCart([]);
   };
 
-  const totalQty = cart.reduce((a, b) => a + b.qty, 0);
+  const totalQty = cart.reduce(
+    (total, item) => total + item.qty,
+    0
+  );
 
   const checkoutWhatsApp = () => {
     if (cart.length === 0) return;
 
     const total = cart.reduce(
-      (a, b) => a + (b.wholesalePrice || b.price) * b.qty,
+      (sum, item) =>
+        sum +
+        (item.wholesalePrice || item.price) * item.qty,
       0
     );
 
     const list = cart
       .map((item, index) => {
-        const price = item.wholesalePrice || item.price;
+        const price =
+          item.wholesalePrice || item.price;
+
         const subtotal = price * item.qty;
 
         return (
@@ -167,7 +223,9 @@ export default function App() {
       `Mohon dibantu cek stok dan ongkirnya ya.`;
 
     window.open(
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+        message
+      )}`,
       "_blank"
     );
 
@@ -175,12 +233,16 @@ export default function App() {
     setOpenCart(false);
   };
 
-  if (loading) return <LoadingScreen />;
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
       <div className="pointer-events-none fixed -left-32 top-20 h-[420px] w-[420px] rounded-full bg-blue-300/30 blur-3xl" />
+
       <div className="pointer-events-none fixed -right-32 top-[35%] h-[420px] w-[420px] rounded-full bg-cyan-300/25 blur-3xl" />
+
       <div className="pointer-events-none fixed bottom-[-160px] left-[20%] h-[380px] w-[380px] rounded-full bg-blue-200/30 blur-3xl" />
 
       <div className="relative z-10">
@@ -201,6 +263,8 @@ export default function App() {
             <Benefits />
           </div>
 
+          <StoreStats />
+
           <div className="py-6 md:py-10">
             <ProductGrid
               products={filteredProducts}
@@ -220,7 +284,12 @@ export default function App() {
         <Footer />
 
         <FloatingWhatsApp />
-        <FloatingCart totalQty={totalQty} openCart={() => setOpenCart(true)} />
+
+        <FloatingCart
+          totalQty={totalQty}
+          openCart={() => setOpenCart(true)}
+        />
+
         <BackToTop />
 
         <CartDrawer
@@ -236,17 +305,40 @@ export default function App() {
 
         <ProductModal
           product={selectedProduct}
-          closeModal={() => setSelectedProduct(null)}
+          closeModal={() =>
+            setSelectedProduct(null)
+          }
           addToCart={addToCart}
         />
 
         <MemberModal
           open={openMember}
-          closeModal={() => setOpenMember(false)}
+          closeModal={() =>
+            setOpenMember(false)
+          }
         />
 
-        <Toast show={toast} text="Produk masuk keranjang" />
+        <Toast
+          show={toast}
+          text="Produk masuk keranjang"
+        />
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={<HomePage />}
+      />
+
+      <Route
+        path="/kapur-tulis-trisensa"
+        element={<TrisensaPage />}
+      />
+    </Routes>
   );
 }

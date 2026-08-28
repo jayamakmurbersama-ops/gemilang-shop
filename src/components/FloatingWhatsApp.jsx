@@ -1,20 +1,44 @@
 import { WHATSAPP_NUMBER } from "../utils/helpers";
 
 export default function FloatingWhatsApp() {
-  const openWA = () => {
-    const text =
-      "Halo Gemilang Maju Bersama Grosir,%0ASaya ingin bertanya produk.";
-
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
-  };
-
   return (
-    <button
-      onClick={openWA}
-      className="fixed bottom-5 left-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-2xl text-white shadow-2xl transition hover:-translate-y-1 hover:bg-green-600 md:left-6 md:h-auto md:w-auto md:gap-3 md:rounded-2xl md:px-5 md:py-4 md:font-black"
+    <a
+      href={`https://wa.me/${WHATSAPP_NUMBER}`}
+      target="_blank"
+      rel="noreferrer"
+      className="
+      fixed
+      bottom-6
+      right-6
+      z-[99]
+      flex
+      items-center
+      gap-3
+      rounded-full
+      bg-gradient-to-r
+      from-green-500
+      to-green-600
+      px-5
+      py-4
+      text-white
+      shadow-2xl
+      transition-all
+      duration-300
+      hover:scale-105
+      hover:shadow-green-300/50
+      "
     >
-      <span>💬</span>
-      <span className="hidden md:inline">Chat Admin</span>
-    </button>
+      <span className="text-2xl">💬</span>
+
+      <div className="hidden sm:block">
+        <p className="text-xs font-bold text-green-100">
+          Butuh Bantuan?
+        </p>
+
+        <p className="font-black">
+          Chat WhatsApp
+        </p>
+      </div>
+    </a>
   );
 }
